@@ -1,5 +1,0 @@
-INFO start
-ERROR timeout
-WARN slow
-ERROR db
-INFO end
