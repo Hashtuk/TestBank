@@ -1,0 +1,5 @@
+login -> passed
+logout -> failed
+search -> passed
+profile -> failed
+Total: 4, Failed: 2
