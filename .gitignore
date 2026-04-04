@@ -58,3 +58,7 @@ allure-report/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Other modules
+Module_2
+Module_3
