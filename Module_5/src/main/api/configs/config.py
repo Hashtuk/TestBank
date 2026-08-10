@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import Any
 
@@ -24,5 +25,18 @@ class Config:
         return cls._isinstance
 
     @staticmethod
+    def _convert_to_env(key: str):
+        res = []
+        for c in key:
+            if c.isupper():
+                res.append('_')
+            res.append(c.upper())
+        return ''.join(res)
+
+    @staticmethod
     def fetch(key: str, default_value: Any = None) -> Any:
+        env_key = Config._convert_to_env(key)
+        env = os.getenv(env_key)
+        if env:
+            return env
         return Config()._dictionary.get(key, default_value)

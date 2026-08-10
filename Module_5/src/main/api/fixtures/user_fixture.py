@@ -4,6 +4,7 @@ from Module_5.src.main.api.generators.model_generator import RandomModelGenerato
 from Module_5.src.main.api.models.account_with_credit_response import AccountWithCredit
 from Module_5.src.main.api.models.create_credit_user_request import CreateCreditUserRequest
 from Module_5.src.main.api.models.create_user_request import CreateUserRequest
+from Module_5.src.main.api.models.deposit_response import DepositResponse
 from Module_5.src.main.api.models.two_accounts_deposited_response import TwoAccountsDeposited
 from Module_5.src.main.api.models.two_accounts_empty_response import TwoAccountsEmpty
 
@@ -103,5 +104,23 @@ def credit_user_with_credit(api_manager, credit_user_with_two_accounts_empty):
         user=credit_user_with_two_accounts_empty.user
     )
     return creds
+
+
+@pytest.fixture
+def credit_user_with_credit_and_transfer(api_manager, credit_user_with_credit,
+                                         credit_user_with_two_accounts_empty):
+    credit = credit_user_with_credit.credit_response
+    accounts = TwoAccountsDeposited(
+        first_account=DepositResponse(id=credit.id, balance=credit.balance),
+        second_account=DepositResponse(
+            id=credit_user_with_two_accounts_empty.second_account.id,
+            balance=credit_user_with_two_accounts_empty.second_account.balance
+        ),
+        user=credit_user_with_two_accounts_empty.user
+    )
+    transfer = api_manager.user_steps.first_transfers_second(accounts, 500)
+    accounts.first_account.balance = transfer.fromAccountIdBalance
+    accounts.second_account.balance += 500
+    return accounts
 
 

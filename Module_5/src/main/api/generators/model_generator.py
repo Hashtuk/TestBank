@@ -8,6 +8,10 @@ T = TypeVar('T')
 
 class RandomModelGenerator:
     @staticmethod
+    def generate_alphanumeric(length: int) -> str:
+        return rstr.xeger(rf'[A-Za-z0-9]{{{length}}}')
+
+    @staticmethod
     def generate(cls: type[T]) -> T:
         type_hints = get_type_hints(cls, include_extras=True)
         init_data = {}

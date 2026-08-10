@@ -32,7 +32,7 @@ class UserSteps(BaseSteps):
         ).post(login_user_request)
         return cast(LoginUserResponse, response)
 
-    def create_bank_account(self, create_user_request: CreateUserRequest):
+    def create_bank_account(self, create_user_request: CreateUserRequest) -> CreateBankAccountResponse:
         response = ValidatedCrudRequester(
             request_spec=RequestSpecs.auth_headers(create_user_request.username, create_user_request.password),
             endpoint=Endpoint.CREATE_BANK_ACCOUNT,
@@ -40,7 +40,16 @@ class UserSteps(BaseSteps):
         ).post()
         return cast(CreateBankAccountResponse, response)
 
-    def deposit_bank(self, two_accounts_empty: TwoAccountsEmpty, account_id, amount):
+    def create_bank_account_invalid(self, create_user_request: CreateUserRequest,
+                                    expected_res: ResponseSpecs):
+        return CrudRequester(
+            request_spec=RequestSpecs.auth_headers(create_user_request.username, create_user_request.password),
+            endpoint=Endpoint.CREATE_BANK_ACCOUNT,
+            response_spec=expected_res
+        ).post()
+
+    def deposit_bank(self, two_accounts_empty: TwoAccountsEmpty | TwoAccountsDeposited,
+                     account_id, amount):
         deposit_request = DepositRequest(
             accountId=account_id,
             amount=amount

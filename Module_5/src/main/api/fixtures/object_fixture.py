@@ -16,7 +16,7 @@ def created_obj():
 
 def clean_user(objects: List[Any]):
     api_manager = ApiManager(objects)
-    for o in objects:
+    for o in objects.copy():
         if isinstance(o, CreateUserResponse):
             api_manager.admin_steps.delete_user(o.id)
         else:

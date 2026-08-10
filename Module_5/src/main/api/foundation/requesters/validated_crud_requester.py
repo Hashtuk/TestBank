@@ -16,7 +16,7 @@ class ValidatedCrudRequester(HttpRequester):
 
     def post(self, model: BaseModel | None = None) -> BaseModel:
         response = self.crud_requester.post(model)
-        with allure.step(f'post {Config.fetch('backendUrl')}/{self.endpoint.value.url} and validated model'):
+        with allure.step(f'post {Config.fetch("backendUrl")}/{self.endpoint.value.url} and validated model'):
             allure.attach(f'Validated model response: {self.endpoint.value.response_model.__name__}',
                           'Validated model',
                           allure.attachment_type.TEXT)
